@@ -16,7 +16,9 @@ export const useTicTacToe = () => {
 
   const activePlayer = deriveActivePlayer(gameTurns);
 
-  const gameBoard: (null | playerType)[][] = initialGameBoard;
+  const gameBoard: (null | playerType)[][] = [
+    ...initialGameBoard.map((arr) => [...arr]),
+  ];
 
   for (const turn of gameTurns) {
     const { player, square } = turn;
