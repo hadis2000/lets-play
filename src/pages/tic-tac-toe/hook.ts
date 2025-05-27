@@ -55,5 +55,18 @@ export const useTicTacToe = () => {
     });
   };
 
-  return { onSelectSquare, winner, activePlayer, gameBoard };
+  const hasDraw = gameTurns.length === 9 && !winner;
+
+  const handleRestart = () => {
+    setGameTurns([]);
+  };
+
+  return {
+    onSelectSquare,
+    winner,
+    activePlayer,
+    gameBoard,
+    hasDraw,
+    handleRestart,
+  };
 };
