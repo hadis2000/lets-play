@@ -1,10 +1,10 @@
 import { CustomToast } from "../../../component";
-import type { playerType } from "../model";
+import type { symbolType } from "../model";
 
 type GameBoardType = {
   onSelectSquare: (rowIndex: number, colIndex: number) => void;
-  activePlayer: playerType;
-  board: (null | playerType)[][];
+  activePlayer: symbolType;
+  board: (null | symbolType)[][];
 };
 
 const GameBoard = ({ onSelectSquare, board, activePlayer }: GameBoardType) => {

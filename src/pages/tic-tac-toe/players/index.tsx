@@ -1,23 +1,23 @@
-import type { playerType } from "../model";
+import type { PlayersType, symbolType } from "../model";
 import Player from "./player";
 
 type playersType = {
-  activePlayer: playerType;
+  activePlayer: symbolType;
+  onChangeName: (symbol: symbolType, newName: string) => void;
+  players: PlayersType;
 };
 
-const Players = ({ activePlayer }: playersType) => {
+const Players = ({ activePlayer, onChangeName, players }: playersType) => {
   return (
     <ol className="flex flex-col sm:flex-row justify-around gap-5">
-      <Player
-        isActive={activePlayer === "X"}
-        initialName="player1"
-        symbol="X"
-      />
-      <Player
-        isActive={activePlayer === "O"}
-        initialName="player2"
-        symbol="O"
-      />
+      {Object.entries(players).map(([key, value]) => (
+        <Player
+          onChangeName={onChangeName}
+          isActive={activePlayer === key}
+          initialName={value}
+          symbol={key as symbolType}
+        />
+      ))}
     </ol>
   );
 };

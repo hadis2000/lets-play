@@ -1,9 +1,9 @@
 import { useState } from "react";
-import type { gameTurnType, playerType } from "./model";
+import type { gameTurnType, symbolType } from "./model";
 import { initialGameBoard, WINNING_COMBINATION } from "./utils";
 
 export const deriveActivePlayer = (gameTurns: gameTurnType[]) => {
-  let currentPlayer: playerType = "X";
+  let currentPlayer: symbolType = "X";
   if (gameTurns.length > 0 && gameTurns[0].player === "X") {
     currentPlayer = "O";
   }
@@ -16,7 +16,7 @@ export const useTicTacToe = () => {
 
   const activePlayer = deriveActivePlayer(gameTurns);
 
-  const gameBoard: (null | playerType)[][] = [
+  const gameBoard: (null | symbolType)[][] = [
     ...initialGameBoard.map((arr) => [...arr]),
   ];
 

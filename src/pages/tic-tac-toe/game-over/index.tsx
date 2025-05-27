@@ -1,11 +1,9 @@
-import type { playerType } from "../model";
-
 type GameOverType = {
-  winner?: playerType;
+  winnerName?: string;
   onReset: () => void;
 };
 
-const GameOver = ({ winner, onReset }: GameOverType) => {
+const GameOver = ({ winnerName, onReset }: GameOverType) => {
   return (
     <div
       className="absolute top-[50%] left-[50%] -translate-[50%] w-full h-full bg-white/85 
@@ -13,8 +11,10 @@ const GameOver = ({ winner, onReset }: GameOverType) => {
     "
     >
       <h2 className="text-7xl font-semibold text-cyan-400 ">Game Over!</h2>
-      {winner ? (
-        <p className="text-4xl text-cyan-800 font-bold">{winner} won!</p>
+      {winnerName ? (
+        <p className="text-4xl text-cyan-800 font-bold">
+          <span className="uppercase">{winnerName}</span> won!
+        </p>
       ) : (
         <p className="text-4xl text-cyan-800 font-bold">It's a draw!</p>
       )}

@@ -1,17 +1,26 @@
 import { useState, type ChangeEvent } from "react";
+import type { symbolType } from "../../model";
 
 type PlayerType = {
-  initialName?: string;
-  symbol?: string;
+  initialName: string;
+  symbol?: symbolType;
   isActive: boolean;
+  onChangeName: (symbol: symbolType, newName: string) => void;
 };
 
-const Player = ({ initialName, symbol, isActive }: PlayerType) => {
+const Player = ({
+  initialName,
+  symbol,
+  isActive,
+  onChangeName,
+}: PlayerType) => {
   const [playerName, setPlayerName] = useState(initialName);
   const [isEditing, setIsEditing] = useState(false);
 
   const onEdit = () => {
     setIsEditing((c) => !c);
+
+    if (isEditing) onChangeName(symbol ?? "X", playerName ?? initialName);
   };
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
