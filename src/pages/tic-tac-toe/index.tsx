@@ -1,25 +1,39 @@
 import { Introduction, PageLayout } from "../../component";
 import GameBoard from "./game-board";
 import Players from "./players";
-import { useTicTacToe } from "./hook";
+import { deriveActivePlayer, derivGameBoard, derivWinner } from "./hook";
 import GameOver from "./game-over";
 import { useState } from "react";
-import type { PlayersType, symbolType } from "./model";
+import type { gameTurnType, PlayersType, symbolType } from "./model";
 
 const TicTacToe = () => {
+  const [gameTurns, setGameTurns] = useState<gameTurnType[]>([]);
   const [players, setPlayers] = useState<PlayersType>({
     X: "player 1",
     O: "player 2",
   });
 
-  const {
-    activePlayer,
-    onSelectSquare,
-    winner,
-    gameBoard,
-    hasDraw,
-    handleRestart,
-  } = useTicTacToe();
+  const activePlayer = deriveActivePlayer(gameTurns);
+  const gameBoard = derivGameBoard(gameTurns);
+  const winner = derivWinner(gameBoard, players);
+  const hasDraw = gameTurns.length === 9 && !winner;
+
+  const onSelectSquare = (rowIndex: number, colIndex: number) => {
+    setGameTurns((prvTurns) => {
+      const currentPlayer = deriveActivePlayer(prvTurns);
+
+      const updatedTurns = [
+        { square: { row: rowIndex, col: colIndex }, player: currentPlayer },
+        ...prvTurns,
+      ];
+
+      return updatedTurns;
+    });
+  };
+
+  const handleRestart = () => {
+    setGameTurns([]);
+  };
 
   const handlePlayerNameChange = (symbol: symbolType, newName: string) => {
     setPlayers((prv) => {
@@ -40,10 +54,7 @@ const TicTacToe = () => {
           players={players}
         />
         {(winner || hasDraw) && (
-          <GameOver
-            winnerName={players[winner ?? "X"]}
-            onReset={handleRestart}
-          />
+          <GameOver winnerName={winner} onReset={handleRestart} />
         )}
         <GameBoard
           onSelectSquare={onSelectSquare}

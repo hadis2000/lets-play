@@ -1,5 +1,4 @@
-import { useState } from "react";
-import type { gameTurnType, symbolType } from "./model";
+import type { gameTurnType, PlayersType, symbolType } from "./model";
 import { initialGameBoard, WINNING_COMBINATION } from "./utils";
 
 export const deriveActivePlayer = (gameTurns: gameTurnType[]) => {
@@ -11,22 +10,10 @@ export const deriveActivePlayer = (gameTurns: gameTurnType[]) => {
   return currentPlayer;
 };
 
-export const useTicTacToe = () => {
-  const [gameTurns, setGameTurns] = useState<gameTurnType[]>([]);
-
-  const activePlayer = deriveActivePlayer(gameTurns);
-
-  const gameBoard: (null | symbolType)[][] = [
-    ...initialGameBoard.map((arr) => [...arr]),
-  ];
-
-  for (const turn of gameTurns) {
-    const { player, square } = turn;
-    const { col, row } = square;
-
-    gameBoard[row][col] = player;
-  }
-
+export const derivWinner = (
+  gameBoard: (null | symbolType)[][],
+  players: PlayersType
+) => {
   let winner;
 
   for (const combination of WINNING_COMBINATION) {
@@ -40,35 +27,24 @@ export const useTicTacToe = () => {
       firstSquareSymbol === secondSquareSymbol &&
       secondSquareSymbol === thirdSquareSymbol
     ) {
-      winner = firstSquareSymbol;
+      winner = players[firstSquareSymbol];
     }
   }
 
-  const onSelectSquare = (rowIndex: number, colIndex: number) => {
-    setGameTurns((prvTurns) => {
-      const currentPlayer = deriveActivePlayer(prvTurns);
+  return winner;
+};
 
-      const updatedTurns = [
-        { square: { row: rowIndex, col: colIndex }, player: currentPlayer },
-        ...prvTurns,
-      ];
+export const derivGameBoard = (gameTurns: gameTurnType[]) => {
+  const gameBoard: (null | symbolType)[][] = [
+    ...initialGameBoard.map((arr) => [...arr]),
+  ];
 
-      return updatedTurns;
-    });
-  };
+  for (const turn of gameTurns) {
+    const { player, square } = turn;
+    const { col, row } = square;
 
-  const hasDraw = gameTurns.length === 9 && !winner;
+    gameBoard[row][col] = player;
+  }
 
-  const handleRestart = () => {
-    setGameTurns([]);
-  };
-
-  return {
-    onSelectSquare,
-    winner,
-    activePlayer,
-    gameBoard,
-    hasDraw,
-    handleRestart,
-  };
+  return gameBoard;
 };
